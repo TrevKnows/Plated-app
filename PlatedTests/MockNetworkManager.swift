@@ -1,5 +1,5 @@
 //
-//  NetworkManagingTest.swift
+//  MockNetworkManager.swift
 //  PlatedTests
 //
 //  Created by Trevor Beaton on 11/17/24.
