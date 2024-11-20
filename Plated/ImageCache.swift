@@ -11,7 +11,11 @@ import UIKit
 final class ImageCache {
     static let shared = ImageCache()
     private let cache = NSCache<NSString, UIImage>()
-    private init() {}
+
+    private init() {
+        cache.totalCostLimit = 1024 * 1024 * 50 
+    }
+    
 
     func object(forKey key: NSString) -> UIImage? {
         cache.object(forKey: key)
