@@ -8,6 +8,16 @@
 import Foundation
 import UIKit
 
-class ImageCache {
-    static let shared = NSCache<NSString, UIImage>()
+final class ImageCache {
+    static let shared = ImageCache()
+    private let cache = NSCache<NSString, UIImage>()
+    private init() {}
+
+    func object(forKey key: NSString) -> UIImage? {
+        cache.object(forKey: key)
+    }
+
+    func setObject(_ obj: UIImage, forKey key: NSString) {
+        cache.setObject(obj, forKey: key)
+    }
 }
