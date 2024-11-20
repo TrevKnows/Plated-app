@@ -23,7 +23,7 @@
 
 import Foundation
 
-struct Recipe: Codable, Equatable, Identifiable {
+struct Recipe: Codable, Equatable, Identifiable, Hashable {
     var id: String { uuid }
     let uuid: String
     let name: String
