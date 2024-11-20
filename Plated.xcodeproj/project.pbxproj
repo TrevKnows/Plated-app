@@ -20,6 +20,7 @@
 		D50B87C42CEA993B002ECABA /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50B87C32CEA993B002ECABA /* HomeViewModelTests.swift */; };
 		D588B8962CEB1458000A5617 /* RecipeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B8952CEB1458000A5617 /* RecipeListView.swift */; };
 		D588B8982CEB1497000A5617 /* RecipeListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B8972CEB1497000A5617 /* RecipeListCellView.swift */; };
+		D588B89A2CED82F6000A5617 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B8992CED82F6000A5617 /* ImageCache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		D50B87C32CEA993B002ECABA /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
 		D588B8952CEB1458000A5617 /* RecipeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListView.swift; sourceTree = "<group>"; };
 		D588B8972CEB1497000A5617 /* RecipeListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListCellView.swift; sourceTree = "<group>"; };
+		D588B8992CED82F6000A5617 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 				D588B8972CEB1497000A5617 /* RecipeListCellView.swift */,
 				D50B87B82CEA5225002ECABA /* NetworkManager.swift */,
 				D50B87BF2CEA8B2B002ECABA /* API.swift */,
+				D588B8992CED82F6000A5617 /* ImageCache.swift */,
 				D50B879F2CEA47FA002ECABA /* Assets.xcassets */,
 				D50B87A12CEA47FA002ECABA /* Preview Content */,
 			);
@@ -224,6 +227,7 @@
 				D50B87B92CEA5225002ECABA /* NetworkManager.swift in Sources */,
 				D588B8962CEB1458000A5617 /* RecipeListView.swift in Sources */,
 				D588B8982CEB1497000A5617 /* RecipeListCellView.swift in Sources */,
+				D588B89A2CED82F6000A5617 /* ImageCache.swift in Sources */,
 				D50B87C22CEA97DC002ECABA /* HomeViewModel.swift in Sources */,
 				D50B87B72CEA4948002ECABA /* Recipe.swift in Sources */,
 				D50B879E2CEA47F9002ECABA /* ContentView.swift in Sources */,
