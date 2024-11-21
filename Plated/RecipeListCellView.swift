@@ -7,6 +7,38 @@
 
 import SwiftUI
 
+struct RecipeRow: View {
+    let recipe: Recipe
+
+    var body: some View {
+        HStack {
+            if let urlString = recipe.photoUrlSmall {
+                AsyncImageView(urlString: urlString)
+                    .frame(width: 80, height: 80)
+                    .cornerRadius(8)
+            } else {
+                Image(systemName: "photo")
+                    .resizable()
+                    .frame(width: 80, height: 80)
+                    .cornerRadius(8)
+                    .foregroundColor(.gray)
+            }
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text(recipe.name)
+                    .font(.headline)
+                Text(recipe.cuisine)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+        }
+        .padding(.vertical, 5)
+    }
+}
+
+
+
 struct RecipeSaveCell: View {
    
     let recipe: Recipe
@@ -28,6 +60,8 @@ struct RecipeSaveCell: View {
             .frame(height: 200)
             .clipped()
             
+            Divider()
+            
             VStack(alignment: .leading, spacing: 8) {
 
                 Text(recipe.name)
@@ -42,7 +76,7 @@ struct RecipeSaveCell: View {
                 
 
             }
-            .padding(12)
+            .padding(8)
         }
         
         .background(Color.white)
