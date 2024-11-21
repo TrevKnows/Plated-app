@@ -8,11 +8,8 @@
 import Foundation
 
 enum HTTPMethod: String {
-    case delete = "DELETE"
     case get = "GET"
-    case patch = "PATCH"
     case post = "POST"
-    case put = "PUT"
 }
 
 enum HTTPScheme: String {
@@ -29,7 +26,10 @@ protocol API {
 }
 
 enum RecipeAPI: API {
+    
     case fetchAllRecipes
+    case malformedData
+    case emptyData
     case fetchRecipesFromCustomURL(String)
     
     var scheme: HTTPScheme {
@@ -38,25 +38,30 @@ enum RecipeAPI: API {
     
     var baseURL: String {
         switch self {
-        case .fetchAllRecipes, .fetchRecipesFromCustomURL:
-            return "d3jbb8n5wk0qxi.cloudfront.net"
+        case .fetchAllRecipes, .fetchRecipesFromCustomURL, .malformedData, .emptyData:
+            return EndpointConstants.baseUrl
         }
     }
-
+    
     var path: String {
         switch self {
         case .fetchAllRecipes:
             return "/recipes.json"
+        case .malformedData:
+            return "/recipes-malformed.json"
+        case .emptyData:
+            return "/recipes-empty.json"
         case .fetchRecipesFromCustomURL(let customPath):
             return customPath
         }
     }
-
+    
     var parameters: [URLQueryItem] {
         return []
     }
-
+    
     var method: HTTPMethod {
         return .get
     }
 }
+

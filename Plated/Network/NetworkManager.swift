@@ -23,19 +23,16 @@ enum APIError: LocalizedError {
     }
 }
 
-/// A generic container for API responses for decoding
 struct APIResponse<T: Decodable>: Decodable {
     let recipes: T
 }
 
-/// A protocol defining the requirements for a network manager
 protocol NetworkManaging {
     /// Fetches data for the recipe and custom URL API endpoint and decodes it into the given type
     /// - Parameters:
     ///   - endpoint: The API endpoint to fetch data from.
     ///   - responseType: The expected type of the decoded response.
-    /// - Returns: A decoded object of the specified type.
-    /// - Throws: `APIError` or `CommonError` if the operation fails.
+
     func fetchData<T: Decodable>(for endpoint: API, responseType: T.Type) async throws -> T
 }
 
@@ -65,14 +62,13 @@ final class NetworkManager: NetworkManaging {
     /// - Returns: A decoded object of the specified type.
     /// - Throws: `APIError` if the request fails or the response cannot be decoded.
     func fetchData<T: Decodable>(for endpoint: API, responseType: T.Type) async throws -> T {
-        // Build URL
+        
         let urlComponents = try Self.buildURL(endpoint: endpoint)
 
         guard let url = urlComponents.url else {
             throw APIError.decodingError
         }
 
-        // Create and configure request
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -81,12 +77,10 @@ final class NetworkManager: NetworkManaging {
             // Perform request
             let (data, response) = try await URLSession.shared.data(for: request)
 
-            // Check HTTP Response
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw APIError.networkError
             }
 
-            // Check status code
             guard (200...299).contains(httpResponse.statusCode) else {
                 throw APIError.networkError
             }
@@ -96,17 +90,30 @@ final class NetworkManager: NetworkManaging {
                 print("Response JSON: \(jsonString)")
             }
 
-            // Configure decoder
             let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-
-            // Attempt to decode
             let apiResponse = try decoder.decode(APIResponse<T>.self, from: data)
             return apiResponse.recipes
+     
         } catch let error as APIError {
+            
             throw error
+            
         } catch {
             throw APIError.decodingError
+        }
+    }
+}
+
+extension DecodingError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .typeMismatch(_, let context),
+             .valueNotFound(_, let context),
+             .keyNotFound(_, let context),
+             .dataCorrupted(let context):
+            return "Data corruption error: \(context.debugDescription)"
+        @unknown default:
+            return "An unknown decoding error occurred."
         }
     }
 }
