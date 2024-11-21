@@ -12,7 +12,7 @@ class HomeViewModelTests: XCTestCase {
     var sut: HomeViewModel!
     var mockNetworkManager: MockNetworkManager!
     
-     override func setUp() {
+    override func setUp() {
         super.setUp()
         mockNetworkManager = MockNetworkManager()
         sut = HomeViewModel(networkManager: mockNetworkManager)
@@ -24,29 +24,54 @@ class HomeViewModelTests: XCTestCase {
         super.tearDown()
     }
     
+    func testInitialState() {
+        // Then
+        if case .loading = sut.state {
+
+        } else {
+            XCTFail("Initial state should be .loading")
+        }
+    }
+    
     func testSuccessfulRecipeFetch() async throws {
         // Given
         let expectedRecipe = Recipe(uuid: "000",
-                                    name: "Pepperpot",
-                                    cuisine: "Guyanese",
-                                    photoUrlSmall: "small.jpg",
-                                    photoUrlLarge: "large.jpg",
-                                    sourceUrl: "source.com",
-                                    youtubeUrl: "youtube.com")
+                                  name: "Pepperpot",
+                                  cuisine: "Guyanese",
+                                  photoUrlSmall: "small.jpg",
+                                  photoUrlLarge: "large.jpg",
+                                  sourceUrl: "source.com",
+                                  youtubeUrl: "youtube.com")
         mockNetworkManager.mockRecipes = [expectedRecipe]
         mockNetworkManager.shouldSucceed = true
-
-        XCTAssertEqual(sut.recipesLoaded.count, 0, "Initial state should have no recipes loaded")
-
+        
         // When
         try await sut.fetchRecipes(endpoint: RecipeAPI.fetchAllRecipes)
-        print("Recipe Count: \(sut.recipesLoaded.count)")
-
+        
         // Then
-        XCTAssertEqual(sut.recipesLoaded.count, 1, "There should be one recipe loaded")
-        XCTAssertEqual(sut.recipesLoaded.first, expectedRecipe, "The loaded recipe should match the expected recipe")
+        guard case let .loaded(recipes) = sut.state else {
+            XCTFail("State should be .loaded")
+            return
+        }
+        
+        XCTAssertEqual(recipes.count, 1, "There should be one recipe loaded")
+        XCTAssertEqual(recipes.first, expectedRecipe, "The loaded recipe should match the expected recipe")
     }
     
+    func testEmptyStateRecipeFetch() async throws {
+        // Given
+        mockNetworkManager.shouldSucceed = true
+        mockNetworkManager.shouldReturnEmptyData = true
+        
+        // When
+        try await sut.fetchRecipes(endpoint: RecipeAPI.emptyData)
+        
+        // Then
+        guard case .empty = sut.state else {
+            XCTFail("State should be .empty")
+            return
+        }
+    }
     
     func testFailedRecipeFetch() async {
         // Given
@@ -58,7 +83,14 @@ class HomeViewModelTests: XCTestCase {
             XCTFail("Expected to throw an error")
         } catch {
             XCTAssertTrue(mockNetworkManager.fetchDataCalled)
-            XCTAssertTrue(error is APIError)
+            
+            guard case .error(let stateError) = sut.state else {
+                XCTFail("State should be .error")
+                return
+            }
+            
+            XCTAssertTrue(stateError is APIError)
+            XCTAssertEqual(stateError as? APIError, .networkError)
         }
     }
     
@@ -66,32 +98,48 @@ class HomeViewModelTests: XCTestCase {
         // Given
         mockNetworkManager.shouldSucceed = true
         mockNetworkManager.shouldReturnMalformedData = true
-
+        
         // When/Then
         do {
             try await sut.fetchRecipes(endpoint: RecipeAPI.malformedData)
             XCTFail("Expected to throw a decoding error")
-        } catch let error as APIError {
-            XCTAssertEqual(error, APIError.decodingError)
         } catch {
-            XCTFail("Expected APIError.decodingError, got \(error)")
+            guard case .error(let stateError) = sut.state else {
+                XCTFail("State should be .error")
+                return
+            }
+            
+            XCTAssertTrue(stateError is APIError)
+            XCTAssertEqual(stateError as? APIError, .decodingError)
         }
     }
     
-    func testEmptyDataRecipeFetch() async throws {
+    func testStateTransitionsDuringFetch() async throws {
         // Given
+        let expectedRecipe = Recipe(uuid: "000",
+                                  name: "Pepperpot",
+                                  cuisine: "Guyanese",
+                                  photoUrlSmall: "small.jpg",
+                                  photoUrlLarge: "large.jpg",
+                                  sourceUrl: "source.com",
+                                  youtubeUrl: "youtube.com")
+        mockNetworkManager.mockRecipes = [expectedRecipe]
         mockNetworkManager.shouldSucceed = true
-        mockNetworkManager.shouldReturnEmptyData = true
-
-        // Assert initial state
-        XCTAssertEqual(sut.recipesLoaded.count, 0, "Initial state should have no recipes loaded")
-
+        
+        // Initially should be loading
+        if case .loading = sut.state {
+            // Test passes
+        } else {
+            XCTFail("Initial state should be .loading")
+        }
+        
         // When
-        try await sut.fetchRecipes(endpoint: RecipeAPI.emptyData)
-
-        // Then
-        XCTAssertEqual(sut.recipesLoaded.count, 0, "There should be no recipes loaded")
-       
+        try await sut.fetchRecipes(endpoint: RecipeAPI.fetchAllRecipes)
+        
+        // Then should be loaded with data
+        guard case .loaded = sut.state else {
+            XCTFail("Final state should be .loaded")
+            return
+        }
     }
-    
 }

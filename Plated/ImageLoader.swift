@@ -7,53 +7,66 @@
 
 import SwiftUI
 
-class ImageLoader: ObservableObject {
+ class ImageLoader: ObservableObject {
     @Published var image: UIImage?
-
+    @Published var isLoading = false
+    
     private let urlString: String?
     private var task: Task<Void, Never>?
-
-    init(urlString: String?) {
+    private let cache: ImageCache
+    
+    init(urlString: String?, cache: ImageCache = .shared) {
         self.urlString = urlString
+        self.cache = cache
     }
-
+    
     deinit {
         cancel()
     }
-
+    
     func load() {
         guard let urlString = urlString, let url = URL(string: urlString) else {
-            print("Invalid URL String")
             return
         }
-
-        if let cachedImage = ImageCache.shared.object(forKey: urlString as NSString) {
-            DispatchQueue.main.async {
-                self.image = cachedImage
-            }
+        
+        if let cachedImage = cache.object(forKey: urlString as NSString) {
+            self.image = cachedImage
             return
         }
-
+        
+        isLoading = true
+        
         task = Task { [weak self] in
             guard let self = self else { return }
-
+            
             do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-
+                let (data, response) = try await URLSession.shared.data(from: url)
+                
+                guard let httpResponse = response as? HTTPURLResponse,
+                      (200...299).contains(httpResponse.statusCode),
+                      !Task.isCancelled else {
+                    return
+                }
+                
                 if let uiImage = UIImage(data: data) {
-                    ImageCache.shared.setObject(uiImage, forKey: urlString as NSString)
-                    DispatchQueue.main.async {
+                    cache.setObject(uiImage, forKey: urlString as NSString)
+                    await MainActor.run {
                         self.image = uiImage
+                        self.isLoading = false
                     }
                 }
             } catch {
                 print("Failed to load image: \(error)")
+                await MainActor.run {
+                    self.isLoading = false
+                }
             }
         }
     }
-
+    
     func cancel() {
         task?.cancel()
         task = nil
+        isLoading = false
     }
 }

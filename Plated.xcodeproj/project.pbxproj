@@ -23,6 +23,8 @@
 		D588B89A2CED82F6000A5617 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B8992CED82F6000A5617 /* ImageCache.swift */; };
 		D588B89C2CED837E000A5617 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B89B2CED837E000A5617 /* ImageLoader.swift */; };
 		D588B89E2CEE87FD000A5617 /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B89D2CEE87FD000A5617 /* AsyncImageView.swift */; };
+		D588B8A02CEEC574000A5617 /* RecipeListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B89F2CEEC574000A5617 /* RecipeListState.swift */; };
+		D588B8A22CEEC5DC000A5617 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D588B8A12CEEC5DC000A5617 /* EmptyStateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,8 @@
 		D588B8992CED82F6000A5617 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		D588B89B2CED837E000A5617 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
 		D588B89D2CEE87FD000A5617 /* AsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
+		D588B89F2CEEC574000A5617 /* RecipeListState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeListState.swift; sourceTree = "<group>"; };
+		D588B8A12CEEC5DC000A5617 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +104,9 @@
 				D50B87B62CEA4948002ECABA /* Recipe.swift */,
 				D50B87C12CEA97DC002ECABA /* HomeViewModel.swift */,
 				D588B8952CEB1458000A5617 /* RecipeListView.swift */,
+				D588B8A12CEEC5DC000A5617 /* EmptyStateView.swift */,
 				D588B8972CEB1497000A5617 /* RecipeListCellView.swift */,
+				D588B89F2CEEC574000A5617 /* RecipeListState.swift */,
 				D50B87B82CEA5225002ECABA /* NetworkManager.swift */,
 				D50B87BF2CEA8B2B002ECABA /* API.swift */,
 				D588B8992CED82F6000A5617 /* ImageCache.swift */,
@@ -235,10 +241,12 @@
 				D588B89C2CED837E000A5617 /* ImageLoader.swift in Sources */,
 				D588B8982CEB1497000A5617 /* RecipeListCellView.swift in Sources */,
 				D588B89A2CED82F6000A5617 /* ImageCache.swift in Sources */,
+				D588B8A22CEEC5DC000A5617 /* EmptyStateView.swift in Sources */,
 				D588B89E2CEE87FD000A5617 /* AsyncImageView.swift in Sources */,
 				D50B87C22CEA97DC002ECABA /* HomeViewModel.swift in Sources */,
 				D50B87B72CEA4948002ECABA /* Recipe.swift in Sources */,
 				D50B879E2CEA47F9002ECABA /* ContentView.swift in Sources */,
+				D588B8A02CEEC574000A5617 /* RecipeListState.swift in Sources */,
 				D50B879C2CEA47F9002ECABA /* PlatedApp.swift in Sources */,
 				D50B87C02CEA8B2B002ECABA /* API.swift in Sources */,
 			);

@@ -10,10 +10,7 @@ import SwiftUI
 
 
 class HomeViewModel: ObservableObject {
-    @Published var recipesLoaded: [Recipe] = []
-    @Published var isLoading = false
-    @Published var error: Error?
-
+    @Published private(set) var state: RecipeListState = .loading
     private let networkManager: NetworkManaging
 
     init(networkManager: NetworkManaging = NetworkManager()) {
@@ -21,20 +18,18 @@ class HomeViewModel: ObservableObject {
     }
 
     @MainActor
-    func fetchRecipes(endpoint: RecipeAPI) async throws{
+    func fetchRecipes(endpoint: RecipeAPI) async throws {
+        state = .loading
+        
         do {
             let recipes = try await networkManager.fetchData(for: endpoint, responseType: [Recipe].self)
-            self.recipesLoaded = recipes
-
+            state = recipes.isEmpty ? .empty : .loaded(recipes)
         } catch let error as APIError {
-            self.error = error
-            print("API Error: \(error.localizedDescription)")
+            state = .error(error)
             throw error
-
         } catch {
             let genericError = APIError.decodingError
-            self.error = genericError
-            print("Unknown Error: \(error.localizedDescription)")
+            state = .error(genericError)
             throw genericError
         }
     }

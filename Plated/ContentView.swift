@@ -10,14 +10,22 @@ import SwiftUI
 struct ContentView: View {
        @StateObject var vm = HomeViewModel(networkManager: NetworkManager())
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-            RecipeListView(recipes: vm.recipesLoaded)
+        VStack(alignment: .leading) {
+
+            Text("Plated")
+                .bold()
+                .font(.largeTitle)
+                .foregroundStyle(.orange)
+                .padding()
+            
+            RecipeListView(state: vm.state)
+                            .refreshable {
+                                try? await vm.fetchRecipes(endpoint: .fetchAllRecipes)
+                            }
         }
-        .padding()
+        .navigationTitle("Plated")
+        .navigationBarTitleDisplayMode(.large)
+      //  .padding()
         .onAppear {
             Task {
                 try await vm.fetchRecipes(endpoint: RecipeAPI.fetchAllRecipes)
