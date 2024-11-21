@@ -8,21 +8,18 @@
 import SwiftUI
 
 struct EmptyStateView: View {
-    let title: String
-    let message: String
-    let image: String
     
     var body: some View {
         VStack(spacing: 20) {
-            Image(systemName: image)
+            Image(systemName: "exclamationmark.triangle")
                 .font(.system(size: 50))
                 .foregroundColor(.gray)
             
-            Text(title)
+            Text("No Recipes Available")
                 .font(.title2)
                 .fontWeight(.semibold)
             
-            Text(message)
+            Text( "We couldn't find any recipes matching your search.")
                 .font(.body)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
@@ -33,5 +30,5 @@ struct EmptyStateView: View {
 }
 
 #Preview {
-    EmptyStateView(title: "Test", message: "Testing!", image: "exclamationmark.triangle")
+    EmptyStateView()
 }

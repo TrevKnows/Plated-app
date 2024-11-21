@@ -39,7 +39,7 @@ enum RecipeAPI: API {
     var baseURL: String {
         switch self {
         case .fetchAllRecipes, .fetchRecipesFromCustomURL, .malformedData, .emptyData:
-            return "d3jbb8n5wk0qxi.cloudfront.net"
+            return EndpointConstants.baseUrl
         }
     }
     

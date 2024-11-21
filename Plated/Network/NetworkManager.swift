@@ -23,19 +23,16 @@ enum APIError: LocalizedError {
     }
 }
 
-/// A generic container for API responses for decoding
 struct APIResponse<T: Decodable>: Decodable {
     let recipes: T
 }
 
-/// A protocol defining the requirements for a network manager
 protocol NetworkManaging {
     /// Fetches data for the recipe and custom URL API endpoint and decodes it into the given type
     /// - Parameters:
     ///   - endpoint: The API endpoint to fetch data from.
     ///   - responseType: The expected type of the decoded response.
-    /// - Returns: A decoded object of the specified type.
-    /// - Throws: `APIError` or `CommonError` if the operation fails.
+
     func fetchData<T: Decodable>(for endpoint: API, responseType: T.Type) async throws -> T
 }
 
@@ -94,11 +91,8 @@ final class NetworkManager: NetworkManaging {
             }
 
             let decoder = JSONDecoder()
-           // decoder.keyDecodingStrategy = .convertFromSnakeCase
-
             let apiResponse = try decoder.decode(APIResponse<T>.self, from: data)
-
-                   return apiResponse.recipes
+            return apiResponse.recipes
      
         } catch let error as APIError {
             
@@ -106,6 +100,20 @@ final class NetworkManager: NetworkManaging {
             
         } catch {
             throw APIError.decodingError
+        }
+    }
+}
+
+extension DecodingError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .typeMismatch(_, let context),
+             .valueNotFound(_, let context),
+             .keyNotFound(_, let context),
+             .dataCorrupted(let context):
+            return "Data corruption error: \(context.debugDescription)"
+        @unknown default:
+            return "An unknown decoding error occurred."
         }
     }
 }
