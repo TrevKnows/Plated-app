@@ -15,8 +15,8 @@ actor ImageCache {
     private let memoryCache = NSCache<NSString, UIImage>()
     private let fileManager = FileManager.default
     
-    private let maxMemoryCacheSize = 1024 * 1024 * 50 // 50 MB
-    private let maxDiskCacheSize = 1024 * 1024 * 100  // 100 MB
+    private let maxMemoryCacheSize = 1024 * 1024 * 50
+    private let maxDiskCacheSize = 1024 * 1024 * 100
     
     private var diskCacheURL: URL {
         let paths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
@@ -42,7 +42,6 @@ actor ImageCache {
         do {
             try fileManager.createDirectory(at: diskCacheURL, withIntermediateDirectories: true)
         } catch {
-            // Handle the error appropriately (e.g., log it)
             print("Failed to create disk cache directory: \(error)")
         }
     }
@@ -100,6 +99,3 @@ actor ImageCache {
         return nil
     }
 }
-
-
-

@@ -103,10 +103,6 @@ struct RecipeCardCellView: View {
     }
 }
 
-
-
-  
-
 #Preview {
     RecipeCardCellView(recipe: Recipe(uuid: "599344f4-3c5c-4cca-b914-2210e3b3312f", name: "Apple & Blackberry Crumble", cuisine: "British", photoUrlSmall: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/535dfe4e-5d61-4db6-ba8f-7a27b1214f5d/small.jpg", photoUrlLarge: "https://d3jbb8n5wk0qxi.cloudfront.net/photos/535dfe4e-5d61-4db6-ba8f-7a27b1214f5d/large.jpg", sourceUrl: "https://www.nyonyacooking.com/recipes/apam-balik~SJ5WuvsDf9WQ", youtubeUrl: "https://www.youtube.com/watch?v=4vhcOwVBDO4"))
 

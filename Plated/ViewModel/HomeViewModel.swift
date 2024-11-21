@@ -19,7 +19,6 @@ class HomeViewModel: ObservableObject {
   
     private let networkManager: NetworkManaging
     private var allRecipes: [Recipe] = []
-    
 
     init(networkManager: NetworkManaging = NetworkManager()) {
          self.networkManager = networkManager

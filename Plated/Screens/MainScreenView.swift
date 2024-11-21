@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct MainScreenView: View {
-    @StateObject var vm = HomeViewModel(networkManager: NetworkManager())
+    @StateObject var viewModel = HomeViewModel(networkManager: NetworkManager())
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             MainHeaderView()
                
-            SearchView(text: $vm.searchText)
+            SearchView(text: $viewModel.searchText)
             
             ScrollView {
-                switch vm.state {
+                switch viewModel.state {
                 case .loading:
                     LoadingView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -32,11 +32,11 @@ struct MainScreenView: View {
                 }
             }
             .refreshable {
-                try? await vm.fetchRecipes(endpoint: .fetchAllRecipes)
+                try? await viewModel.fetchRecipes(endpoint: .fetchAllRecipes)
             }
         }
         .task {
-            try? await vm.fetchRecipes(endpoint: .fetchAllRecipes)
+            try? await viewModel.fetchRecipes(endpoint: .fetchAllRecipes)
         }
     }
     
